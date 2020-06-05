@@ -10,7 +10,7 @@ server.use(cors());
 
 
 server.get("/", (req, res) => {
-    res.status(200).json({ message: "Hello from LuggageSpace API!" })
+    res.status(200).send("<h2>LuggageSpace API is alive!</h2>")
 });
 
 
