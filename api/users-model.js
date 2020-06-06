@@ -1,13 +1,4 @@
-const database = require('../database/dbConfig.js');
-
-module.exports = {
-    findUsers,
-    findById,
-    addUser,
-    findByFilter,
-    updateUser,
-    deleteUser
-}
+const database = require('../database/dbConfig');
 
 // Get all users
 const findUsers = () => {
@@ -27,16 +18,31 @@ const findByFilter = (filter) => {
 }
 
 // Add user
-const addUser = (user) => {
-    const [id] = database("users").insert(user, "id");
-    return findById(id)
+const registerUser = (newUser) => {
+    // console.log("newUser in model", newUser)
+    return database("users")
+        .returning("id")
+        .insert(newUser)
+        .then(([id]) => {
+            console.log("line 27", id, typeof id)
+            return findById(id)
+        })
 }
 
-const updateUser = (changes, id) => {
+// Update username
+async function updateUser(changes, id) {
     return database("users")
         .update("username", changes.username)
         .where("id", id)
         .then(([id]) => {
             return findById(id)
         })
+}
+
+module.exports = {
+    findUsers,
+    findById,
+    registerUser,
+    findByFilter,
+    updateUser
 }
