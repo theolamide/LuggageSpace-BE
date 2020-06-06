@@ -24,7 +24,6 @@ const registerUser = (newUser) => {
         .returning("id")
         .insert(newUser)
         .then(([id]) => {
-            console.log("line 27", id, typeof id)
             return findById(id)
         })
 }
