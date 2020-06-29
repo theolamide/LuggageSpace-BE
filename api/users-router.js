@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const restricted = require('../middlewares/restricted-middleware.js')
 const Users = require("./users-model.js");
 
 
@@ -68,6 +69,34 @@ router.get("/", (req, res) => {
                     message: 'Failed to get users'
                 });
         })
+})
+
+router.put("/update-username/:id", restricted, (req, res) => {
+    const userData = req.body
+    const { id } = req.params
+
+    if (!userData.username) {
+        res.status(400)
+            .json({
+                message: "Please provide a username"
+            })
+    } else {
+        Users.updateUser(userData, id)
+            .then(updatedUsername => {
+                res.status(201)
+                    .json({
+                        message: "Username updated successfully",
+                        username: updatedUsername
+                    })
+            })
+            .catch(err => {
+                res.status(400)
+                    .json({
+                        message: "Unable to update username",
+                        error: err
+                    })
+            })
+    }
 })
 
 function signedToken(user) {
