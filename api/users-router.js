@@ -32,6 +32,7 @@ router.post("/register", (req, res) => {
 
 router.post('/login', async (req, res) => {
     let { username, password } = req.body;
+
     try {
         if (!(username && password)) {
             res.status(406).json({ error: 'Invalid Username or Password' });
@@ -86,7 +87,7 @@ router.put("/update-username/:id", restricted, (req, res) => {
                 res.status(201)
                     .json({
                         message: "Username updated successfully",
-                        username: updatedUsername
+                        username: updatedUsername[0].username
                     })
             })
             .catch(err => {

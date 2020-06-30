@@ -29,10 +29,12 @@ const registerUser = (newUser) => {
 }
 
 // Update username
-async function updateUser(changes, id) {
+const updateUser = (changes, id) => {
+    console.log("here")
     return database("users")
-        .update("username", changes.username)
+        .update(changes)
         .where("id", id)
+        .returning("id")
         .then(([id]) => {
             return findById(id)
         })
